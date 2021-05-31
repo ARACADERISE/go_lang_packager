@@ -1,3 +1,3 @@
-module github.com/ARACADERISE/TFPackager
+module TFPackager
 
 go 1.16
