@@ -57,6 +57,28 @@ func Read_lang_info_package() *LangInfo {
 		log.Fatal(err)
 	}
 
+	if len(LI.EA) == 0 {
+		dir, _Err := os.Getwd()
+
+		if _Err != nil {
+			log.Fatal(_Err)
+		}
+
+		LI.EA = append(LI.EA, ExportAs { ExportName: "Language Info", ExportVersion: "0.1.0", Path: dir + "/lang_info.json", Required_Export: true })
+
+		file, e := json.MarshalIndent(LI, "", "\t")
+
+		if e != nil {
+			log.Fatal(e)
+		}
+
+		err = ioutil.WriteFile("lang_info.json", file, 0644)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	return &LI
 }
 
