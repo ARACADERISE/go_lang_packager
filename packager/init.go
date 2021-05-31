@@ -16,6 +16,50 @@ type PackageInfo struct {
 	All_files	[]string `json:"all_files"`
 }
 
+type ExportAs struct {
+	ExportName	string	`json:"export_mod_name"`
+	ExportVersion	string	`json:"export_mod_version"`
+	Path		string	`json:"mod_path"`
+	Required_Export bool	`json:"required"`
+}
+
+type LangInfo struct {
+	LangName	string		`json:"lang_name"`
+	LangVersion	string		`json:"lang_version"`
+	EA		[]ExportAs	`json:"exports"`
+
+}
+
+func Read_lang_info_package() *LangInfo {
+	dir, err := os.Getwd()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = os.Stat(dir)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	file, _err := os.Open(dir + "/lang_info.json")
+
+	if _err != nil {
+		log.Fatal(_err)
+	}
+
+	decode := json.NewDecoder(file)
+	LI := LangInfo{}
+	err = decode.Decode(&LI)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return &LI
+}
+
 func exists() bool {
 	_, err := os.Stat("tfpackage.json")
 
@@ -43,7 +87,7 @@ func Package(filename string) *PackageInfo {
 			log.Fatal(e)
 		}
 
-		info.All_files = append(info.All_files, info.File)
+		info.All_files = append(info.All_files, info.Main)
 
 		files, err := ioutil.ReadDir(dir)
 
