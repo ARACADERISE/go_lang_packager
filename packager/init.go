@@ -33,7 +33,20 @@ type LangInfo struct {
 
 }
 
-func Read_info_package(package_name string) *LangInfo {
+type _TokenInfo struct {
+	Token_value	string	`json:"token"`
+	Token_desc	string	`json"token_desc"`
+	Token_err	string	`json:"token_err"`
+}
+
+type TokenInfo struct {
+	TI	[]_TokenInfo	`json:"token_info"`
+}
+
+type Default struct {}
+
+
+func Read_info_package(package_name string) interface{} {
 	dir, err := os.Getwd()
 
 	if err != nil {
@@ -53,45 +66,59 @@ func Read_info_package(package_name string) *LangInfo {
 	}
 
 	decode := json.NewDecoder(file)
-	LI := LangInfo{}
-	err = decode.Decode(&LI)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	switch package_name {
+		case "lang_info.json": {
+			LI := LangInfo{}
+			err = decode.Decode(&LI)
 
-	if len(LI.EA) == 0 {
-		dir, _Err := os.Getwd()
-
-		if _Err != nil {
-			log.Fatal(_Err)
-		}
-
-		LI.EA = append(LI.EA, ExportAs { ExportName: "Language Info", ExportVersion: "0.1.0", Path: dir + "/lang_info.json", Required_Export: true })
-
-		file, e := json.MarshalIndent(LI, "", "\t")
-
-		if e != nil {
-			log.Fatal(e)
-		}
-
-		err = ioutil.WriteFile("lang_info.json", file, 0644)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	for i := 0; i < len(LI.EA); i++ {
-		if LI.EA[i].ExportName == "Language Info" {
-			if LI.EA[i].ExportVersion == VERSION {
-				break
+			if err != nil {
+				log.Fatal(err)
 			}
-			log.Fatal("Error matching lang_info.json Module Version")
+
+			if len(LI.EA) == 0 {
+				dir, _Err := os.Getwd()
+
+				if _Err != nil {
+					log.Fatal(_Err)
+				}
+
+				LI.EA = append(LI.EA, ExportAs { ExportName: "Language Info", ExportVersion: "0.1.0", Path: dir + "/lang_info.json", Required_Export: true })
+
+				file, e := json.MarshalIndent(LI, "", "\t")
+
+				if e != nil {
+					log.Fatal(e)
+				}
+
+				err = ioutil.WriteFile("lang_info.json", file, 0644)
+
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+
+			for i := 0; i < len(LI.EA); i++ {
+				if LI.EA[i].ExportName == "Language Info" {
+					if LI.EA[i].ExportVersion == VERSION {
+						break
+					}
+					log.Fatal("Error matching lang_info.json Module Version")
+				}
+			}
+
+			return &LI
 		}
+		case "token_info.json": {
+			TI := TokenInfo{}
+			err = decode.Decode(&TI)
+
+			return TI
+		}
+		default: log.Fatal("Something went wrong")
 	}
 
-	return &LI
+	return Default{}
 }
 
 func exists() bool {
