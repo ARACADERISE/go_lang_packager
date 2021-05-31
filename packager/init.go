@@ -27,17 +27,31 @@ func exists() bool {
 
 func Package(filename string) *PackageInfo {
 	if !exists() {
-		info := PackageInfo{ Author: "Your Name", Version: "0.1.0", Desc: "Your language description", File: os.Getenv("HOME") + "/src/" + filename }
+		dir, _err := os.Getwd()
 
-		files, err := iouti.Read(os.Getenv("HOME") + "/src")
+		if _err != nil {
+			log.Fatal(_err)
+		}
+
+		info := PackageInfo{ Author: "Your Name", Version: "0.1.0", Desc: "Your language description", File: dir + "/" + filename }
+
+		_, e := os.Stat(info.File)
+
+		if e != nil {
+			log.Fatal(e)
+		}
+
+		info.All_files = append(info.All_files, info.File)
+
+		files, err := ioutil.ReadDir(dir)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		for _,f := range files {
-			if strings.Contains(files.Name(), ".tf") {
-				info.All_files = append(info.all_files, os.Getenv("HOME") + "/src/" + f.Name())
+			if strings.Contains(f.Name(), ".tf") {
+				info.All_files = append(info.All_files, os.Getenv("HOME") + "/src/" + f.Name())
 			}
 		}
 
@@ -61,6 +75,6 @@ func Package(filename string) *PackageInfo {
 			log.Fatal(err)
 		}
 
-		return &info
+		return &PI
 	}
 }
