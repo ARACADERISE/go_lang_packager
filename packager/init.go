@@ -12,7 +12,7 @@ type PackageInfo struct {
 	Author		string	 `json:"author"`
 	Version		string	 `json:"version"`
 	Desc		string	 `json:"desc"`
-	File		string	 `json:"file"`
+	Main		string	 `json:"file"`
 	All_files	[]string `json:"all_files"`
 }
 
@@ -33,9 +33,11 @@ func Package(filename string) *PackageInfo {
 			log.Fatal(_err)
 		}
 
-		info := PackageInfo{ Author: "Your Name", Version: "0.1.0", Desc: "Your language description", File: dir + "/" + filename }
+		info := PackageInfo{ Author: "Your Name", Version: "0.1.0", Desc: "Your language description" }
 
-		_, e := os.Stat(info.File)
+		info.Main = dir + "/" + "main.tf"
+
+		_, e := os.Stat(info.Main)
 
 		if e != nil {
 			log.Fatal(e)
