@@ -16,6 +16,8 @@ type PackageInfo struct {
 	All_files	[]string `json:"all_files"`
 }
 
+const VERSION = "0.1.0"
+
 type ExportAs struct {
 	ExportName	string	`json:"export_mod_name"`
 	ExportVersion	string	`json:"export_mod_version"`
@@ -77,6 +79,15 @@ func Read_info_package(package_name string) *LangInfo {
 
 		if err != nil {
 			log.Fatal(err)
+		}
+	}
+
+	for i := 0; i < len(LI.EA); i++ {
+		if LI.EA[i].ExportName == "Language Info" {
+			if LI.EA[i].ExportVersion == VERSION {
+				break
+			}
+			log.Fatal("Error matching lang_info.json Module Version")
 		}
 	}
 

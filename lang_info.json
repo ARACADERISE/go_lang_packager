@@ -12,7 +12,7 @@
 	"exports": [
 		{
 			"export_mod_name": "Language Info",
-			"export_mod_version": "0.1.0",
+			"export_mod_version": "0.2.0",
 			"mod_path": "/home/moca/go_lang_packager/lang_info.json",
 			"required": true
 		}
