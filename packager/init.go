@@ -26,6 +26,7 @@ type ExportAs struct {
 type LangInfo struct {
 	LangName	string		`json:"lang_name"`
 	LangVersion	string		`json:"lang_version"`
+	Tokens		[]string	`json:"lang_tokens"`
 	EA		[]ExportAs	`json:"exports"`
 
 }
