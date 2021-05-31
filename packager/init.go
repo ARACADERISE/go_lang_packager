@@ -31,7 +31,7 @@ type LangInfo struct {
 
 }
 
-func Read_lang_info_package() *LangInfo {
+func Read_info_package(package_name string) *LangInfo {
 	dir, err := os.Getwd()
 
 	if err != nil {
@@ -44,7 +44,7 @@ func Read_lang_info_package() *LangInfo {
 		log.Fatal(err)
 	}
 
-	file, _err := os.Open(dir + "/lang_info.json")
+	file, _err := os.Open(dir + "/" + package_name)
 
 	if _err != nil {
 		log.Fatal(_err)

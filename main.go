@@ -7,6 +7,6 @@ import (
 
 func main() {
 	packager.Read_command_line()
-	info := packager.Read_lang_info_package()
+	info := packager.Read_info_package("lang_info.json")
 	fmt.Println(info)
 }
