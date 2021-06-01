@@ -16,6 +16,36 @@ type DefaultJson struct {
 	All_files	[]string `json:"all_files"`
 }
 
+type PreReq struct {
+	file	string
+}
+
+func Read_commands() interface{} {
+	var args interface{} = os.Args
+
+	switch args.(type) {
+		case []string: {
+			if len(args.([]string)) > 1 {
+				switch os.Args[1] {
+					case "prereq": {
+						if len(args.([]string)) > 2 {
+							PR := PreReq{}
+
+							PR.file = os.Args[2]
+
+							return PR
+						} else {
+							log.Fatal("Expected ./main prereq filename")
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return Default{}
+}
+
 func Read_command_line() {
 	info := DefaultJson{ Author: "Your Name", Version: "0.1.0", Desc: "My Language Description" }
 	var args interface{} = os.Args
